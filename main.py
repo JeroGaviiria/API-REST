@@ -5,19 +5,19 @@ from typing import List, Dict
 
 app = FastAPI()
 
-# Modelo de datos para el usuario
+
 class Usuario(BaseModel):
     ingresos: List[Dict] = []
     egresos: List[Dict] = []
 
-# Instancia de Usuario para almacenar los datos
+
 usuario = Usuario()
 
-# Variables para los IDs de ingresos y egresos
+
 ingreso_id_counter = 0
 egreso_id_counter = 0
 
-# Modelos de datos para ingresos y egresos
+
 class TransaccionBase(BaseModel):
     fecha: str
     descripcion: str
@@ -30,7 +30,7 @@ class Ingreso(TransaccionBase):
 class Egreso(TransaccionBase):
     id: int = None
 
-# Rutas para manejar las transacciones
+
 @app.post("/ingresos/")
 def agregar_ingreso(ingreso: Ingreso):
     global ingreso_id_counter
@@ -55,7 +55,7 @@ def listar_ingresos() -> List[Dict]:
 def listar_egresos() -> List[Dict]:
     return usuario.egresos
 
-# Reportes
+
 @app.get("/reporte_basico/")
 def generar_reporte_basico():
     total_ingresos = sum(ingreso["valor"] for ingreso in usuario.ingresos)
@@ -85,7 +85,7 @@ def generar_reporte_ampliado():
         "egresos_por_categoria": egresos_por_categoria
     })
 
-# Rutas para eliminar ingresos y egresos por ID
+
 @app.delete("/eliminar_ingreso/{id}")
 def eliminar_ingreso(id: int):
     for i, ingreso in enumerate(usuario.ingresos):
